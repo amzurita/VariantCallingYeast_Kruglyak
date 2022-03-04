@@ -1,0 +1,2 @@
+Sample01     /path/to/fastqs/read_foward.fastq.gz       /path/to/fastqs/read_reverse.fastq.gz
+Sample02     /path/to/fastqs/read_foward.fastq.gz       /path/to/fastqs/read_reverse.fastq.gz
