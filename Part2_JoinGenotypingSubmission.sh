@@ -15,8 +15,6 @@
 #Load modules to be used
 . /u/local/Modules/default/init/modules.sh
 module load anaconda3
-module load bwa/0.7.17
-module load samtools/1.11
 module load gatk/4.2.0.0
 
 #EDIT THIS LINES
@@ -56,4 +54,4 @@ gatk --java-options "-Xmx108g -Xms108g" GenotypeGVCFs -R $reference -V gendb://D
 
 #Collect metrics for the filtering of ploidy
 #Edit this line when filters are applied
-gatk --java-options "-Xmx108g -Xms108g" VariantsToTable -V delete_${output_name}_combinedGVCFs.vcf.gz -F CHROM -F POS -F TYPE -F REF -F ALT -F MULTI-ALLELIC -GF GT -GF DP -GF AD -O output.table
+gatk --java-options "-Xmx108g -Xms108g" VariantsToTable -V delete_${output_name}_combinedGVCFs.vcf.gz -F CHROM -F POS -F TYPE -F REF -F ALT -F MULTI-ALLELIC -GF GT -GF DP -GF AD -O ${output_name}_output.table
