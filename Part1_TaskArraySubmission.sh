@@ -44,18 +44,15 @@ new_line="${sampleid}\t${sampleid}.g.vcf.gz"
 
 if [ $SGE_TASK_ID == 1 ]; then
   echo -e $new_line > ${output_name}_GVCFs.sample_map
+  touch ${output_name}_SamplesFailed.txt
 else
   echo -e $new_line >> ${output_name}_GVCFs.sample_map
 fi
 
 
 # Save the ones that failed by checking if the file exists into _SamplesFailed.txt
-if ! [ -f ${sampleid}.g.vcf.gz] ; then
-  if ! [ -f ${output_name}_SamplesFailed.txt] ; then
-    echo -e $sampleid > ${output_name}_SamplesFailed.txt
-  else
-    echo -e $sampleid >> ${output_name}_SamplesFailed.txt
-  fi
+if ! [ -e ${sampleid}.g.vcf.gz] ; then
+  echo -e $sampleid >> ${output_name}_SamplesFailed.txt
 fi
 
 #Example task array command:

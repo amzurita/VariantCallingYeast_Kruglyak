@@ -27,21 +27,33 @@ output_name=TestRun
 
 
 #GVCF DB
-gatk --java-options "-Xmx108g -Xms108g" GenomicsDBImport --genomicsdb-workspace-path ${output_name}_Database -L $interval_file --batch-size 100 --sample-name-map ${output_name}_GVCFs.sample_maps
-
-#SelectVariants
-
+gatk --java-options "-Xmx108g -Xms108g" GenomicsDBImport --genomicsdb-workspace-path Database_${output_name} -L $interval_file --batch-size 50 --sample-name-map ${output_name}_GVCFs.sample_maps
 
 #GenotypeGVCF
+gatk --java-options "-Xmx108g -Xms108g" GenotypeGVCFs -R $reference -V gendb://Database_${output_name} -O delete_${output_name}_combinedGVCFs.vcf.gz
 
-
-#HardFilterVariants
-
-
-#Filter Genotypes
-
+# #Filter SNP
+# gatk --java-options "-Xmx108g -Xms108g" SelectVariants -V delete_${output_name}_combinedGVCFs.vcf.gz -R $reference -select-type SNP -O delete_${output_name}_snps.vcf.gz
+#
+# gatk --java-options "-Xmx108g -Xms108g" VariantFiltration -V delete_${output_name}_snps.vcf.gz -R $reference \
+# -filter "QD < 20.0" --filter-name "QD20" -filter "QUAL < 30.0" --filter-name "QUAL30" \
+# -filter "SOR > 3.0" --filter-name "SOR3" -filter "FS > 60.0" --filter-name "FS60" \
+# -filter "MQ < 40.0" --filter-name "MQ40" \
+# -O delete_${output_name}_snps_filtered.vcf.gz
+#
+# #Filter indels
+# gatk --java-options "-Xmx108g -Xms108g" SelectVariants -V delete_${output_name}_combinedGVCFs.vcf.gz -R $reference -select-type INDEL -O delete_${output_name}_indels.vcf.gz
+#
+# gatk --java-options "-Xmx108g -Xms108g" VariantFiltration -V delete_${output_name}_indels.vcf.gz -R $reference \
+# -filter "QD < 20.0" --filter-name "QD20" -filter "QUAL < 30.0" --filter-name "QUAL30" \
+# -filter "FS > 200.0" --filter-name "FS200" -O delete_${output_name}_indels_filtered.vcf.gz
+#
+# #Join Filtered Genotypes
+# gatk --java-options "-Xmx108g -Xms108g" MergeVcfs -R $reference -I delete_${output_name}_snps_filtered.vcf.gz -I delete_${output_name}_indels_filtered.vcf.gz -O ${output_name}.filteredcalls.vcf.gz
 
 #Consider adding filtering script
 
 
-#Collect metrics for the filtering of ploidy ()
+#Collect metrics for the filtering of ploidy
+#Edit this line when filters are applied
+gatk --java-options "-Xmx108g -Xms108g" VariantsToTable -V delete_${output_name}_combinedGVCFs.vcf.gz -F CHROM -F POS -F TYPE -F REF -F ALT -F MULTI-ALLELIC -GF GT -GF DP -GF AD -O output.table
