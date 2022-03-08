@@ -62,4 +62,4 @@ gatk BuildBamIndex -I ${sample_id}.reordered.bam
 gatk HaplotypeCaller -R $reference_fa -I ${sample_id}.reordered.bam -O ${sample_id}.g.vcf.gz -ERC GVCF -ploidy $ploidy
 
 #Add step to delete intermediate files
-#rm delete_*
+rm delete_*
