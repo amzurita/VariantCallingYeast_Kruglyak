@@ -59,7 +59,4 @@ gatk BuildBamIndex -I ${sample_id}.reordered.bam
 # samtools depth -a sorted_dedup_reads.bam > depth_out.txt
 
 #HaplotypeCaller
-gatk HaplotypeCaller -R $reference_fa -I ${sample_id}.reordered.bam -O ${sample_id}.g.vcf.gz -ERC GVCF -ploidy $ploidy
-
-#Add step to delete intermediate files
-rm delete_*
+gatk HaplotypeCaller --java-options "-XX:ParallelGCThreads=2" -R $reference_fa -I ${sample_id}.reordered.bam -O ${sample_id}.g.vcf.gz -ERC GVCF -ploidy $ploidy
